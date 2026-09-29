@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Creative Studio — Visual &amp; Print Designer</title>
+<style>
+  :root {
+    --bg: #FCFBF7;
+    --surface: #F4F0E5;
+    --surface-2: #EDE8DA;
+    --ink: #1A1A1A;
+    --muted: #7C7666;
+    --accent: #C85A32;
+    --line: #E7E1D3;
+    --serif: "Didot", "Bodoni MT", "Playfair Display", Georgia, "Times New Roman", serif;
+    --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    animation: pageIn 0.9s ease both;
+  }
+
+  @keyframes pageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(252, 251, 247, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+  }
+
+  .logo {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 10px 0;
+    transition: color 0.25s ease;
+  }
+
+  .menu-btn:hover {
+    color: var(--accent);
+  }
+
+  .menu-btn .bars {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 26px;
+  }
+
+  .menu-btn .bars i {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.25s ease, width 0.25s ease;
+  }
+
+  .menu-btn .bars i:nth-child(2) {
+    width: 70%;
+    align-self: flex-end;
+  }
+
+  .menu-btn:hover .bars i:nth-child(2) {
+    width: 100%;
+  }
+
+  /* ---------- Slide-out sidebar ---------- */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 90;
+  }
+
+  .backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, 92vw);
+    background: var(--bg);
+    border-left: 1px solid var(--line);
+    z-index: 100;
+    transform: translateX(102%);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 0 44px;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sidebar-head .logo {
+    font-size: 0.72rem;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.25s ease, transform 0.25s ease;
+  }
+
+  .close-btn:hover {
+    color: var(--accent);
+    transform: rotate(90deg);
+  }
+
+  .sidebar-nav {
+    list-style: none;
+    margin-top: 56px;
+  }
+
+  .sidebar-nav li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sidebar-nav a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 26px 0;
+    font-size: clamp(1.7rem, 4vw, 2.2rem);
+    line-height: 1.1;
+    transition: color 0.3s ease, padding-left 0.3s ease;
+  }
+
+  .sidebar-nav a .num {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+
+  .sidebar-nav a:hover {
+    color: var(--accent);
+    padding-left: 10px;
+  }
+
+  .sidebar-foot {
+    margin-top: auto;
+    padding: 32px 0 40px;
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 2.2;
+  }
+
+  .sidebar-foot a:hover {
+    color: var(--accent);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 120px 0 88px;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .hero-meta .rule {
+    width: 56px;
+    height: 1.5px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 6.5vw, 5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    max-width: 900px;
+    margin-bottom: 44px;
+  }
+
+  .hero-bio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: end;
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+  }
+
+  .hero-bio p {
+    font-size: 1.12rem;
+    line-height: 1.7;
+    color: var(--ink);
+    max-width: 480px;
+  }
+
+  .hero-bio .side {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 2.1;
+    text-align: right;
+  }
+
+  .hero-bio .side strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ---------- Work gallery ---------- */
+  .work {
+    padding: 16px 0 120px;
+  }
+
+  .work-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding: 22px 0;
+    margin-bottom: 56px;
+  }
+
+  .work-head h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .work-head .count {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .gallery {
+    column-count: 2;
+    column-gap: 48px;
+  }
+
+  .work-item {
+    break-inside: avoid;
+    margin-bottom: 72px;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .work-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .art {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .art svg,
+  .art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .work-item:hover .art svg,
+  .work-item:hover .art img {
+    transform: scale(1.03);
+  }
+
+  .caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .caption h3 {
+    font-size: 1.15rem;
+    font-weight: 400;
+  }
+
+  .caption .meta {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .caption .meta .dot {
+    color: var(--accent);
+    margin: 0 8px;
+  }
+
+  /* ---------- About / Studio ---------- */
+  .studio {
+    background: var(--surface);
+    border-block: 1px solid var(--line);
+    padding: 120px 0;
+  }
+
+  .studio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+
+  .studio .label {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .studio h2 {
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .studio p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin-bottom: 16px;
+  }
+
+  .studio p strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .studio-list {
+    list-style: none;
+    align-self: end;
+  }
+
+  .studio-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.05rem;
+  }
+
+  .studio-list li .idx {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+  }
+
+  .studio-list li .sub {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    align-self: center;
+  }
+
+  /* ---------- Contact ---------- */
+  .contact {
+    padding: 140px 0 120px;
+    text-align: center;
+  }
+
+  .contact .label {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .contact h2 {
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    max-width: 760px;
+    margin: 0 auto 36px;
+  }
+
+  .contact .btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 18px 40px;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .contact .btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 34px 0;
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .footer-row a:hover {
+    color: var(--accent);
+  }
+
+  .footer-row .studio-name {
+    color: var(--ink);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .hero-bio {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .hero-bio .side {
+      text-align: left;
+    }
+
+    .studio-grid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      padding: 0 20px;
+    }
+
+    .hero {
+      padding: 88px 0 64px;
+    }
+
+    .gallery {
+      column-count: 1;
+      column-gap: 0;
+    }
+
+    .work-item {
+      margin-bottom: 56px;
+    }
+
+    .caption {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .caption .meta {
+      white-space: normal;
+    }
+
+    .contact {
+      padding: 100px 0 88px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a href="#top" class="logo">Creative<span>Studio</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span class="bars" aria-hidden="true"><i></i><i></i></span>
+        Menu
+      </button>
+    </nav>
+  </header>
+
+  <!-- Sidebar menu -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Menu">
+    <div class="sidebar-head">
+      <span class="logo">Creative<span>Studio</span></span>
+      <button class="close-btn" id="closeBtn" aria-label="Close menu">Close ✕</button>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="#top"><span>Studio</span><span class="num">00</span></a></li>
+      <li><a href="#work"><span>Selected Work</span><span class="num">01</span></a></li>
+      <li><a href="#about"><span>About</span><span class="num">02</span></a></li>
+      <li><a href="#contact"><span>Contact</span><span class="num">03</span></a></li>
+    </ul>
+    <div class="sidebar-foot">
+      <p>Available for commissions — 2026</p>
+      <p><a href="mailto:hello@creativestudio.com">hello@creativestudio.com</a></p>
+    </div>
+  </aside>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="container">
+      <div class="hero-meta">
+        <span class="rule"></span>
+        <span>Visual &amp; Print Designer</span>
+      </div>
+      <h1>Brands, packaging &amp; posters — <em>printed with intention</em>.</h1>
+      <div class="hero-bio">
+        <p>
+          I'm Sreethu Sabeesh, a visual &amp; print designer crafting identity
+          systems, packaging, and poster series that feel honest, warm, and
+          built to last — on paper and on screen.
+        </p>
+        <div class="side">
+          <p><strong>Selected Work</strong> — 2023–2026</p>
+          <p>Brand Guidelines · Packaging · Poster Series</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work gallery -->
+  <section class="work" id="work">
+    <div class="container">
+      <div class="work-head">
+        <h2>Selected Work</h2>
+        <span class="count">Brand · Packaging · Print — 06 pieces</span>
+      </div>
+
+      <div class="gallery">
+
+        <!-- 1: Brand Guidelines -->
+        <figure class="work-item">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="400" fill="#F4F0E5"/>
+              <rect x="0" y="0" width="300" height="14" fill="#1A1A1A"/>
+              <rect x="40" y="70" width="220" height="220" fill="#1A1A1A"/>
+              <circle cx="150" cy="180" r="70" fill="#C85A32"/>
+              <rect x="40" y="310" width="140" height="6" fill="#C85A32"/>
+              <rect x="40" y="326" width="100" height="6" fill="#1A1A1A" opacity="0.35"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>Atelier Identity Manual</h3>
+            <span class="meta">Brand Guidelines <span class="dot">•</span> 2026</span>
+          </figcaption>
+        </figure>
+
+        <!-- 2: Packaging -->
+        <figure class="work-item" style="transition-delay: 0.08s;">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="300" fill="#EDE8DA"/>
+              <rect x="70" y="52" width="160" height="196" fill="#C85A32"/>
+              <rect x="70" y="52" width="160" height="26" fill="#1A1A1A"/>
+              <rect x="104" y="110" width="92" height="10" fill="#FCFBF7"/>
+              <rect x="118" y="134" width="64" height="8" fill="#FCFBF7" opacity="0.75"/>
+              <rect x="128" y="156" width="44" height="8" fill="#FCFBF7" opacity="0.55"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>Artisan Tea Co.</h3>
+            <span class="meta">Packaging <span class="dot">•</span> 2025</span>
+          </figcaption>
+        </figure>
+
+        <!-- 3: Poster Series -->
+        <figure class="work-item" style="transition-delay: 0.16s;">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 380" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="380" fill="#F4F0E5"/>
+              <rect x="40" y="60" width="220" height="34" fill="#1A1A1A"/>
+              <rect x="40" y="106" width="150" height="34" fill="#1A1A1A" opacity="0.85"/>
+              <rect x="40" y="152" width="190" height="34" fill="#C85A32"/>
+              <rect x="40" y="210" width="66" height="66" fill="#1A1A1A"/>
+              <line x1="40" y1="320" x2="260" y2="320" stroke="#1A1A1A" stroke-width="2"/>
+              <line x1="40" y1="334" x2="200" y2="334" stroke="#1A1A1A" stroke-width="2" opacity="0.4"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>City Nights Concert Series</h3>
+            <span class="meta">Poster Series <span class="dot">•</span> 2025</span>
+          </figcaption>
+        </figure>
+
+        <!-- 4: Brand Guidelines -->
+        <figure class="work-item" style="transition-delay: 0.24s;">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="400" fill="#EDE8DA"/>
+              <circle cx="150" cy="150" r="104" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+              <circle cx="150" cy="150" r="60" fill="#C85A32"/>
+              <rect x="52" y="290" width="196" height="10" fill="#1A1A1A"/>
+              <rect x="52" y="312" width="140" height="8" fill="#1A1A1A" opacity="0.4"/>
+              <rect x="52" y="330" width="110" height="8" fill="#1A1A1A" opacity="0.25"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>Nord Coffee Brand System</h3>
+            <span class="meta">Brand Guidelines <span class="dot">•</span> 2024</span>
+          </figcaption>
+        </figure>
+
+        <!-- 5: Packaging -->
+        <figure class="work-item" style="transition-delay: 0.32s;">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="300" fill="#F4F0E5"/>
+              <rect x="40" y="40" width="100" height="100" fill="#1A1A1A"/>
+              <rect x="160" y="40" width="100" height="100" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+              <rect x="40" y="160" width="100" height="100" fill="none" stroke="#C85A32" stroke-width="2"/>
+              <rect x="160" y="160" width="100" height="100" fill="#C85A32"/>
+              <circle cx="210" cy="210" r="22" fill="#FCFBF7"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>Botanica Skincare</h3>
+            <span class="meta">Packaging <span class="dot">•</span> 2024</span>
+          </figcaption>
+        </figure>
+
+        <!-- 6: Poster Series -->
+        <figure class="work-item" style="transition-delay: 0.4s;">
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 300 380" preserveAspectRatio="xMidYMid slice">
+              <rect width="300" height="380" fill="#EDE8DA"/>
+              <polygon points="150,56 244,280 56,280" fill="#C85A32"/>
+              <polygon points="150,110 196,242 104,242" fill="#FCFBF7"/>
+              <line x1="56" y1="316" x2="244" y2="316" stroke="#1A1A1A" stroke-width="2"/>
+              <rect x="56" y="332" width="120" height="8" fill="#1A1A1A" opacity="0.4"/>
+            </svg>
+          </div>
+          <figcaption class="caption">
+            <h3>Print Festival Posters</h3>
+            <span class="meta">Poster Series <span class="dot">•</span> 2023</span>
+          </figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Studio -->
+  <section class="studio" id="about">
+    <div class="container studio-grid">
+      <div>
+        <p class="label">02 — About</p>
+        <h2>A practice rooted in print, built for the whole brand story.</h2>
+        <p>
+          From first sketch to final proof, my work lives at the intersection of
+          <strong>typography, structure, and texture</strong> — the quiet details
+          that make a brand feel considered.
+        </p>
+        <p>
+          I believe good design is not loud, but <strong>clear</strong>: built on
+          grids, set with care, and finished with intention.
+        </p>
+      </div>
+      <ul class="studio-list">
+        <li>
+          <span class="idx">01</span>
+          <span>Brand Identity &amp; Guidelines</span>
+          <span class="sub">Strategy → System</span>
+        </li>
+        <li>
+          <span class="idx">02</span>
+          <span>Packaging &amp; Print Production</span>
+          <span class="sub">Concept → Press</span>
+        </li>
+        <li>
+          <span class="idx">03</span>
+          <span>Poster Series &amp; Editorial</span>
+          <span class="sub">Grid → Page</span>
+        </li>
+        <li>
+          <span class="idx">04</span>
+          <span>Digital Brand Applications</span>
+          <span class="sub">Print → Screen</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <p class="label">03 — Contact</p>
+      <h2>Have something worth printing? <em>Let's make it.</em></h2>
+      <a class="btn" href="mailto:hello@creativestudio.com">Send Me an Email</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span class="studio-name">Creative<span style="color: var(--accent)">Studio</span></span>
+      <span>&copy; <span id="year"></span> Sreethu Sabeesh — All rights reserved</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Sidebar menu ----------
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("backdrop");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function openMenu() {
+      sidebar.classList.add("open");
+      backdrop.classList.add("open");
+      menuBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    }
+
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    backdrop.addEventListener("click", closeMenu);
+
+    sidebar.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    // ---------- Scroll reveal ----------
+    const items = document.querySelectorAll(".work-item");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    items.forEach((item) => observer.observe(item));
+
+    // ---------- Footer year ----------
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
